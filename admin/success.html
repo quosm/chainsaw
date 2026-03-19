@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Admin Page</title>
+        <style>
+            body {
+                background: black;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            const sessionToken = localStorage.getItem("session");
+            if (!sessionToken) {
+                window.location.href = "/404.html";
+            } else {
+                document.body.innerHTML = `<h1>Welcome, admin! Token: ${sessionToken}</h1>`;
+            }
+        </script>
+    </body>
+</html>

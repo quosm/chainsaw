@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>Login Page</title>
+        <style>
+            body {
+                background: black;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            form { width: 700px; }
+
+            input {
+                width: 100%;
+                margin-bottom: 10px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            button {
+                width: 50%;
+                height: 50px;
+                font-size: 20px;
+                background: black;
+                color: white;
+                border: 2px solid white;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="loginForm">
+            <input type="text" id="username" name="user_name" required>
+            <input type="password" id="userpass" name="user_pass" required>
+            <button type="submit">Log In</button>
+        </form>
+
+        <script>
+            const sessionToken = localStorage.getItem("session");
+            if (sessionToken) {
+                window.location.href = "success.html";
+            }
+
+            document.getElementById("loginForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(e.target);
+                const params = new URLSearchParams(formData);
+
+                try {
+                    const res = await fetch("https://sultry-seamier-adalynn.ngrok-free.dev/admin", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "ngrok-skip-browser-warning": "69420",
+                        },
+                        body: params
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(`Server returned status ${res.status}`);
+                    }
+
+                    const token = await res.text();
+                    console.log("Received token:", token);
+
+                    localStorage.setItem("session", token);
+
+                    window.location.href = window.location.pathname + "success.html";
+                } catch (err) {
+                    console.error("Login failed:", err);
+                    alert("Login failed, check console.");
+                }
+            });
+        </script>
+    </body>
+</html>
